@@ -12,16 +12,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.dov4k1n.learndependencyinjection.ui.theme.LearnDependencyInjectionTheme
+import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var someDependency: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
+
+        (application as MyApplication).appComponent.inject(this@MainActivity)
+        val text: String = someDependency
+
         enableEdgeToEdge()
         setContent {
             LearnDependencyInjectionTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = text,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -33,7 +43,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "$name!",
         modifier = modifier
     )
 }
